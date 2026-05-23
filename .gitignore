@@ -1,32 +1,31 @@
-# Virtual environment
+# --- Virtual Environment ---
 .venv/
+env/
+venv/
+
+# --- Entorno y Variables ---
 .env
 
-.env
-__pycache__/
-
-# Python
+# --- Python ---
 __pycache__/
 *.py[cod]
-*.sqlite3
+*$py.class
 
-# Django
+# --- Bases de datos y archivos locales ---
 db.sqlite3
-media/
+*.sqlite3
+*.sqlite3-journal
 
-# Static files
+# --- Django ---
+media/
 staticfiles/
 
-# IDE
+# --- IDEs / Editores ---
 .vscode/
 .idea/
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Logs
+# --- Logs y otros ---
 *.log
-
-# Docker
 *.pid
