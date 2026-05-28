@@ -123,3 +123,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'authentication.Usuario'
+
+# A dónde redirigir al usuario tras un login exitoso (temporalmente al admin, luego a tu dashboard)
+LOGIN_REDIRECT_URL = '/admin/' 
+
+# A dónde mandar al usuario si intenta entrar a una página protegida sin iniciar sesión
+LOGIN_URL = '/auth/login/'
