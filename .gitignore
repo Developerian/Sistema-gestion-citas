@@ -31,3 +31,7 @@ Thumbs.db
 # --- Logs y otros ---
 *.log
 *.pid
+
+# --- Docker Persistencia ---
+data/
+.docker/
