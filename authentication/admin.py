@@ -12,11 +12,11 @@ admin.site.register(Negocio)
 @admin.register(Usuario)
 class CustomUserAdmin(UserAdmin):
     # Esto define qué campos se muestran en la lista del panel
-    list_display = ('username', 'email', 'id_rol', 'id_negocio', 'estado', 'is_staff')
+    list_display = ('username', 'email', 'rol', 'negocio', 'estado', 'is_staff')
     
     # Esto permite editar los nuevos campos desde el formulario del administrador
     fieldsets = UserAdmin.fieldsets + (
         ('Información de Citas', {
-            'fields': ('id_rol', 'id_negocio', 'celular', 'estado'),
+            'fields': ('rol', 'negocio', 'celular', 'estado'),
         }),
     )

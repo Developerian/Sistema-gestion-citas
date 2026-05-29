@@ -30,8 +30,8 @@ class Usuario(AbstractUser):
     id_usuario = models.AutoField(primary_key=True)
     
     # Relaciones de tu DER
-    id_rol = models.ForeignKey(Rol, on_delete=models.PROTECT, null=True, blank=True)
-    id_negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE, null=True, blank=True)
+    rol = models.ForeignKey(Rol, on_delete=models.PROTECT, null=True, blank=True)
+    negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE, null=True, blank=True)
     
     # Campos adicionales de tu DER
     celular = models.CharField(max_length=20, blank=True, null=True)
@@ -39,4 +39,4 @@ class Usuario(AbstractUser):
     
 
     def __str__(self):
-        return f"{self.username} ({self.id_rol.nombre_rol if self.id_rol else 'Sin Rol'})"
+        return self.username
