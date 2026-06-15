@@ -1,9 +1,8 @@
 from django import forms
-from .models import Cita
+from .models import Cita, Cliente
 from authentication.models import Usuario
 
 class CitaForm(forms.ModelForm):
-    
     class Meta:
         model = Cita
         # Campos que la recepcionista va a llenar en la pantalla
@@ -37,3 +36,9 @@ class CitaForm(forms.ModelForm):
             # Filtramos los ComboBox de Clientes y Empleados para que SOLO salgan los de este negocio
             self.fields['id_cliente'].queryset = self.fields['id_cliente'].queryset.filter(id_negocio=negocio)
             self.fields['id_usuario'].queryset = Usuario.objects.filter(negocio=negocio)
+
+class ClienteForm(forms.ModelForm):
+
+    class Meta:
+        model = Cliente
+        fields = ['nombre', 'apellido', 'email', 'telefono']
