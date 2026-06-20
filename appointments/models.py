@@ -6,18 +6,17 @@ class Cliente(models.Model):
     id_cliente = models.AutoField(primary_key=True)
     id_negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE)
     primer_nombre = models.CharField(max_length=100)
-    segundo_nombre = models.CharField(max_length=100)
-    primer_apellido = models.CharField(max_length=100, blank=True)
-    segundo_apellido = models.CharField(max_length=100)
-    cedula = models.CharField(max_length=10)
+    segundo_nombre = models.CharField(max_length=100, blank=True, null= True)
+    primer_apellido = models.CharField(max_length=100, blank=True, null= True)
+    segundo_apellido = models.CharField(max_length=100, null=True)
+    cedula = models.CharField(max_length=10, null=True, blank= True)
     email = models.EmailField(blank=True, null=True)
-    celular = models.CharField(max_length=20)
-    fecha_registro = models.DateTimeField(auto_now_add=True)
+    celular = models.CharField(max_length=20, null= True)
+    fecha_registro = models.DateTimeField(auto_now_add=True, null=True)
 
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido or ''}".strip()
-
+        return f"{self.primer_nombre} {self.primer_apellido}"
 
 class Cita(models.Model):
     class EstadoCita(models.TextChoices):
@@ -32,11 +31,9 @@ class Cita(models.Model):
 
     id_cita = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='citas_asignadas')
-
-
+    id_servicio = models.ForeignKey("Servicio", blank=True, null=True, on_delete= models.PROTECT, related_name="citas")
     id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='citas')
-    #id_negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE, related_name='citas_negocio')
-    
+    cita_origen = models.ForeignKey("self", on_delete= models.SET_NULL, null=True, blank=True, related_name="Reagendamiento")    
     fecha_cita = models.DateField()
     hora_cita = models.TimeField()
     observaciones = models.TextField(blank=True, null=True)
@@ -58,3 +55,4 @@ class Servicio(models.Model):
     descripcion = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     duracion_minutos = models.PositiveIntegerField(default=0, help_text="Duracion del servicio en minutos")
+
