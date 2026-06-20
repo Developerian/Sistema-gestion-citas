@@ -56,3 +56,5 @@ class Servicio(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     duracion_minutos = models.PositiveIntegerField(default=0, help_text="Duracion del servicio en minutos")
 
+    def __str__(self):
+        return self.nombre_servicio
