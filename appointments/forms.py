@@ -1,25 +1,28 @@
+#forms.py
+
 from django import forms
-from .models import Cita, Cliente
+from .models import Cita, Cliente, Servicio
 from authentication.models import Usuario
 
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
         # Campos que la recepcionista va a llenar en la pantalla
-        fields = ['id_cliente', 'id_usuario', 'fecha_cita', 'hora_cita', 'observaciones', 'estado']
+        fields = ['id_cliente', 'id_servicio','id_usuario', 'fecha_cita', 'hora_cita', 'observaciones', 'estado']
         
         labels = {
             'id_cliente': 'Seleccionar Cliente',
+            'id_servicio': 'Servicio profesional',
             'id_usuario': 'Asignar a Empleado / Especialista',
             'fecha_cita': 'Fecha de la Cita',
             'hora_cita': 'Hora de la Cita',
             'observaciones': 'Observaciones',
-            'estado': 'Estado Inicial',
         }
 
         widgets = {
             # Forzamos los selectores nativos de fecha y hora del navegador
             'fecha_cita': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
+            "id_servicio": forms.Select(attrs={"class": "form-input"}),
             'hora_cita': forms.TimeInput(attrs={'class': 'form-input', 'type': 'time'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-input', 'rows': 3, 'placeholder': 'Notas o requerimientos especiales...'}),
             'id_cliente': forms.Select(attrs={'class': 'form-input'}),
@@ -28,17 +31,22 @@ class CitaForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # Este truco es clave para el SaaS: pasamos el negocio actual al formulario
+        # Recibimos el objeto negocio directamente
         negocio = kwargs.pop('negocio', None)
         super().__init__(*args, **kwargs)
         
         if negocio:
-            # Filtramos los ComboBox de Clientes y Empleados para que SOLO salgan los de este negocio
-            self.fields['id_cliente'].queryset = self.fields['id_cliente'].queryset.filter(id_negocio=negocio)
+            # 1. Filtramos servicios que pertenecen al negocio
+            # Asumiendo que ahora agregarás id_negocio a Servicio en models.py
+            self.fields["id_servicio"].queryset = Servicio.objects.filter(id_negocio=negocio)
+            
+            # 2. Filtramos clientes que pertenecen al negocio
+            self.fields['id_cliente'].queryset = Cliente.objects.filter(id_negocio=negocio)
+            
+            # 3. Filtramos usuarios (empleados) que pertenecen al mismo negocio
             self.fields['id_usuario'].queryset = Usuario.objects.filter(negocio=negocio)
-
+            
 class ClienteForm(forms.ModelForm):
-
     class Meta:
         model = Cliente
         fields = [
@@ -50,3 +58,23 @@ class ClienteForm(forms.ModelForm):
             'email',
             'celular',
         ]
+
+        labels = {
+            "primer_nombre": "Primer nombre",
+            "segundo_nombre": "Segundo nombre",
+            "primer_apellido": "Primer apellido",
+            "segundo_apellido": "Segundo apellido",
+            "cedula": "Cédula",
+            "email": "Correo electrónico",
+            "celular": "Celular",
+        }
+
+        widgets = {
+            "primer_nombre": forms.TextInput(attrs={"class": "form-input"}),
+            "segundo_nombre": forms.TextInput(attrs={"class": "form-input"}),
+            "primer_apellido": forms.TextInput(attrs={"class": "form-input"}),
+            "segundo_apellido": forms.TextInput(attrs={"class": "form-input"}),
+            "cedula": forms.TextInput(attrs={"class": "form-input"}),
+            "email": forms.EmailInput(attrs={"class": "form-input"}),
+            "celular": forms.TextInput(attrs={"class": "form-input"}),
+        }

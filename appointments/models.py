@@ -1,3 +1,5 @@
+#models.py
+
 from django.db import models
 from django.conf import settings
 from authentication.models import Negocio
@@ -51,6 +53,7 @@ class Cita(models.Model):
 
 class Servicio(models.Model):
     id_servicio = models.AutoField(primary_key=True)
+    id_negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE)
     nombre_servicio = models.CharField(max_length=25)
     descripcion = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)

@@ -2,6 +2,8 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+
+from appointments.models import Cita
 from .forms import ClienteForm, Cliente
 # Importa los modelos de clientes según se tenga nombrados (ej. Cliente)
 # from .models import Cliente 
@@ -37,3 +39,19 @@ def lista_clientes(request):
     # Filtra por el negocio del usuario logueado para mayor seguridad
     clientes = Cliente.objects.filter(id_negocio=request.user.id_negocio)
     return render(request, 'appointments/lista_clientes.html', {'clientes': clientes})
+
+# appointments/views.py
+
+def dashboard_view(request):
+    negocio_actual = request.user.negocio
+    
+    # FORMA CORRECTA según tu DER:
+    # Obtener todas las citas de todos los usuarios que pertenecen a este negocio
+    citas = Cita.objects.filter(id_usuario__negocio=negocio_actual)
+    
+    context = {
+        'citas': citas,
+        'negocio': negocio_actual,
+        # ...
+    }
+    return render(request, 'dashboard.html', context)

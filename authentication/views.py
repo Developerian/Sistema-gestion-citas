@@ -42,8 +42,7 @@ def dashboard_view(request):
         form = CitaForm(negocio=negocio)
 
     # 3. Consultamos las citas de HOY para este negocio específico
-    citas_hoy = Cita.objects.filter(id_negocio=negocio, fecha_cita=now().date())
-
+    citas_hoy = Cita.objects.filter(id_usuario__negocio=negocio, fecha_cita=now().date())
     # 4. EL PASO CRÍTICO: Empaquetar todo en el contexto
     context = {
         'form': form,           # <- SI ESTO FALTA, EL HTML SE VE VACÍO
