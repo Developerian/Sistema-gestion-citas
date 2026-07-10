@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Citas</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Panel Negocio</h2>
+        <a href="#" class="active">Citas</a>
+        <a href="#">Clientes</a>
+        <a href="#">Servicios</a>
+        <a href="#">Empleados</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1 style="margin: 0; font-size: 24px;">Gestión de Citas</h1>
+            </div>
+            <a href="#" class="btn-logout">Cerrar Sesión</a>
+        </div>
+
+        <div class="container-grid">
+            <div class="card">
+                <h3 style="margin-top: 0; margin-bottom: 20px;">Nueva Cita</h3>
+                
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div style="background-color: #fee2e2; color: #dc2626; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <span style="color: #dc2626; font-size: 12px; display: block; margin-top: 4px;">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn-save">Agendar Cita</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top: 0; margin-bottom: 20px;">Historial Próximo</h3>
+                <table class="table-citas">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Servicio</th>
+                            <th>Fecha/Hora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td class="empty-msg" colspan="4">Las citas agendadas aparecerán en este bloque.</td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
