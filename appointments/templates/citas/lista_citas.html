@@ -1,0 +1,93 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}
+Listado de citas
+{% endblock %}
+
+{% block menu_citas %}
+active
+{% endblock %}
+
+{% block encabezado %}
+Listado de Citas
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+
+        <h3>Historial de citas</h3>
+
+        <a href="{% url 'crear_cita' %}"
+           class="btn-save"
+           style="width:auto;text-decoration:none;padding:10px 20px;">
+
+            Nueva cita
+
+        </a>
+
+    </div>
+
+    <table class="table-citas">
+
+        <thead>
+
+            <tr>
+
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for cita in citas %}
+
+            <tr>
+
+                <td>{{ cita.id_cliente }}</td>
+
+                <td>{{ cita.id_servicio }}</td>
+
+                <td>{{ cita.fecha_cita }}</td>
+
+                <td>{{ cita.hora_cita }}</td>
+
+                <td>
+
+                    <span class="badge">
+                        {{ cita.estado }}
+                    </span>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+
+                <td colspan="5" class="empty-msg">
+
+                    No existen citas registradas.
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

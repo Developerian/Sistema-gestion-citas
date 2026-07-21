@@ -6,7 +6,7 @@ from appointments.models import Cita
 from .forms import ClienteForm, Cliente
 from .forms import CitaForm
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CitaForm
 
@@ -24,6 +24,30 @@ def crear_cita(request):
         form = CitaForm(negocio=negocio_usuario)
         
     return render(request, 'citas/crear_cita.html', {'form': form})
+
+
+@login_required
+def lista_citas(request):
+    negocio = request.user.negocio
+    citas = Cita.objects.filter(
+        id_servicio__id_negocio=negocio
+    )
+    context = {
+        "citas": citas
+    }
+    return render(
+        request,
+        "citas/lista_citas.html",
+        context
+    )
+
+@login_required
+def dashboard(request):
+
+    return render(
+        request,
+        "dashboard/inicio.html"
+    )
 
 @login_required
 def clientes_view(request):

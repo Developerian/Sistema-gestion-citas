@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <h2>Panel Negocio</h2>
+
+        <a href="{% url 'dashboard' %}">
+            Inicio
+        </a>
+
+        <a href="{% url 'lista_citas' %}"
+           class="{% block menu_citas %}{% endblock %}">
+            Citas
+        </a>
+
+        <a href="{% url 'clientes' %}"
+           class="{% block menu_clientes %}{% endblock %}">
+            Clientes
+        </a>
+
+        <a href="#">
+            Servicios
+        </a>
+
+        <a href="#">
+            Empleados
+        </a>
+
+    </div>
+
+
+    <div class="main-content">
+
+        <div class="header">
+
+            <div>
+                <h1 style="margin:0;">
+                    {% block encabezado %}
+                    Dashboard
+                    {% endblock %}
+                </h1>
+            </div>
+
+            <a href="#" class="btn-logout">
+                Cerrar Sesión
+            </a>
+
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

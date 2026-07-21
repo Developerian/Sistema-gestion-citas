@@ -52,4 +52,4 @@ def dashboard_view(request):
         'rol': rol,
     }
     
-    return render(request, 'appointments/dashboard.html', context)
+    return render(request, 'authentication/dashboard.html', context)
