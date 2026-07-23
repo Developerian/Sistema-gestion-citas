@@ -126,28 +126,23 @@ Listado de Citas
 
         botonesEliminar.forEach(boton => {
             boton.addEventListener("click", (e) => {
-                e.preventDefault(); // Evita cualquier comportamiento por defecto del botón
+                e.preventDefault(); 
                 
                 const id = boton.dataset.id;
                 const cliente = boton.dataset.cliente || "este cliente";
 
-                // Asignar dinámicamente la URL de eliminación al formulario
                 formulario.action = `/dashboard/citas/${id}/eliminar/`;
                 
-                // Mensaje personalizado opcional
                 mensajeEliminar.textContent = `¿Estás seguro de que deseas eliminar la cita del cliente #${cliente}?`;
 
-                // Mostrar el modal
                 modal.style.display = "flex";
             });
         });
 
-        // Cerrar modal al hacer clic en Cancelar
         cerrar.addEventListener("click", () => {
             modal.style.display = "none";
         });
 
-        // Cerrar modal al hacer clic fuera del contenido del modal
         window.addEventListener("click", (e) => {
             if (e.target === modal) {
                 modal.style.display = "none";
