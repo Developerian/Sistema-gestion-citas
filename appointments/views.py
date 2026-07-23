@@ -5,10 +5,14 @@ from django.utils import timezone
 from appointments.models import Cita
 from .forms import ClienteForm, Cliente
 from .forms import CitaForm
+from django.contrib import messages
 
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CitaForm
+
+
 
 @login_required
 def crear_cita(request):
@@ -24,6 +28,28 @@ def crear_cita(request):
         form = CitaForm(negocio=negocio_usuario)
         
     return render(request, 'citas/crear_cita.html', {'form': form})
+
+@login_required
+def eliminar_cita(request, id_cita):
+    negocio = request.user.negocio
+    cita = get_object_or_404(
+        Cita, 
+        id_cita = id_cita, 
+        id_servicio__id_negocio = negocio
+        )
+    
+    if request.method == "POST":
+        cita.delete()
+        messages.success(request, "La cita se ha eliminado exitosamente")
+        return redirect("lista_citas")
+    
+    return render(
+        request,
+        "citas/eliminar_cita.html",{
+            "cita" : cita
+        }
+    )
+
 
 
 @login_required
@@ -43,7 +69,6 @@ def lista_citas(request):
 
 @login_required
 def dashboard(request):
-
     return render(
         request,
         "dashboard/inicio.html"

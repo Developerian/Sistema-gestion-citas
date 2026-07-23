@@ -12,82 +12,149 @@ active
 Listado de Citas
 {% endblock %}
 
+
 {% block content %}
 
-<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h3>Historial de citas</h3>
 
-        <h3>Historial de citas</h3>
+    <a href="{% url 'crear_cita' %}" class="btn-save" style="width:auto;text-decoration:none;padding:10px 20px;">
 
-        <a href="{% url 'crear_cita' %}"
-           class="btn-save"
-           style="width:auto;text-decoration:none;padding:10px 20px;">
+        Nueva cita
 
-            Nueva cita
+    </a>
 
-        </a>
+</div>
 
-    </div>
 
-    <table class="table-citas">
+<table class="table-citas">
 
-        <thead>
+    <thead>
 
-            <tr>
+        <tr>
+            <th>Cliente</th>
+            <th>Servicio</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
 
-                <th>Cliente</th>
-                <th>Servicio</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Estado</th>
+    </thead>
 
-            </tr>
 
-        </thead>
-
-        <tbody>
+    <tbody>
 
         {% for cita in citas %}
 
-            <tr>
+        <tr>
 
-                <td>{{ cita.id_cliente }}</td>
+            <td>{{ cita.id_cliente }}</td>
 
-                <td>{{ cita.id_servicio }}</td>
+            <td>{{ cita.id_servicio }}</td>
 
-                <td>{{ cita.fecha_cita }}</td>
+            <td>{{ cita.fecha_cita }}</td>
 
-                <td>{{ cita.hora_cita }}</td>
+            <td>{{ cita.hora_cita }}</td>
 
-                <td>
+            <td>
+                <span class="badge">
+                    {{ cita.estado }}
+                </span>
+            </td>
 
-                    <span class="badge">
-                        {{ cita.estado }}
-                    </span>
 
-                </td>
+            <td>
 
-            </tr>
+                <button class="btn-open-delete" data-id="{{ cita.id_cita }}" data-cliente="{{ cita.id_cliente }}">
+                    Eliminar
+                </button>
+
+            </td>
+
+
+        </tr>
+
 
         {% empty %}
 
-            <tr>
+        <tr>
 
-                <td colspan="5" class="empty-msg">
+            <td colspan="6" class="empty-msg">
+                No existen citas registradas.
+            </td>
 
-                    No existen citas registradas.
-
-                </td>
-
-            </tr>
+        </tr>
 
         {% endfor %}
 
-        </tbody>
 
-    </table>
+    </tbody>
 
+</table>
+
+
+
+<!-- MODAL -->
+<div id="modalEliminar" class="modal">
+    <div class="modal-content">
+        <h3>Eliminar cita</h3>
+        <p id="mensajeEliminar">¿Estás seguro de que deseas eliminar esta cita?</p>
+
+        <form id="formEliminar" method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button type="submit" class="btn-delete">
+                    Sí, eliminar
+                </button>
+                <button type="button" id="cerrarModal">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const botonesEliminar = document.querySelectorAll(".btn-open-delete");
+        const modal = document.getElementById("modalEliminar");
+        const formulario = document.getElementById("formEliminar");
+        const cerrar = document.getElementById("cerrarModal");
+        const mensajeEliminar = document.getElementById("mensajeEliminar");
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener("click", (e) => {
+                e.preventDefault(); // Evita cualquier comportamiento por defecto del botón
+                
+                const id = boton.dataset.id;
+                const cliente = boton.dataset.cliente || "este cliente";
+
+                // Asignar dinámicamente la URL de eliminación al formulario
+                formulario.action = `/dashboard/citas/${id}/eliminar/`;
+                
+                // Mensaje personalizado opcional
+                mensajeEliminar.textContent = `¿Estás seguro de que deseas eliminar la cita del cliente #${cliente}?`;
+
+                // Mostrar el modal
+                modal.style.display = "flex";
+            });
+        });
+
+        // Cerrar modal al hacer clic en Cancelar
+        cerrar.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // Cerrar modal al hacer clic fuera del contenido del modal
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+</script>
+
 
 {% endblock %}

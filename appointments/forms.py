@@ -37,7 +37,7 @@ class CitaForm(forms.ModelForm):
         
         if negocio:
             # 1. Filtramos servicios que pertenecen al negocio
-            # Asumiendo que ahora agregarás id_negocio a Servicio en models.py
+
             self.fields["id_servicio"].queryset = Servicio.objects.filter(id_negocio=negocio)
             
             # 2. Filtramos clientes que pertenecen al negocio
