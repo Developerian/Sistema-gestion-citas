@@ -1,5 +1,5 @@
 {% extends "dashboard/base_dashboard.html" %}
-
+{% load static %}
 {% block title %}
 Listado de citas
 {% endblock %}
@@ -66,11 +66,18 @@ Listado de Citas
 
 
             <td>
-
+                
                 <button class="btn-open-delete" data-id="{{ cita.id_cita }}" data-cliente="{{ cita.id_cliente }}">
                     Eliminar
                 </button>
 
+            </td>
+
+            <td>
+                <button class="btn-open-update" data-id="{{cita.id_cita}}" data-cliente="{{cita.id_cliente}}">
+                    Editar
+                </button>
+                
             </td>
 
 
@@ -97,7 +104,7 @@ Listado de Citas
 
 
 <!-- MODAL -->
-<div id="modalEliminar" class="modal">
+<div id="modalEliminar" class="modal oculto">
     <div class="modal-content">
         <h3>Eliminar cita</h3>
         <p id="mensajeEliminar">¿Estás seguro de que deseas eliminar esta cita?</p>
@@ -116,40 +123,24 @@ Listado de Citas
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const botonesEliminar = document.querySelectorAll(".btn-open-delete");
-        const modal = document.getElementById("modalEliminar");
-        const formulario = document.getElementById("formEliminar");
-        const cerrar = document.getElementById("cerrarModal");
-        const mensajeEliminar = document.getElementById("mensajeEliminar");
+<div id="modal-editar" class="modal oculto">
 
-        botonesEliminar.forEach(boton => {
-            boton.addEventListener("click", (e) => {
-                e.preventDefault(); 
-                
-                const id = boton.dataset.id;
-                const cliente = boton.dataset.cliente || "este cliente";
+    <div class="modal-content">
 
-                formulario.action = `/dashboard/citas/${id}/eliminar/`;
-                
-                mensajeEliminar.textContent = `¿Estás seguro de que deseas eliminar la cita del cliente #${cliente}?`;
+        <span id="cerrar-modal">&times;</span>
 
-                modal.style.display = "flex";
-            });
-        });
+        <h2>Editar cita</h2>
 
-        cerrar.addEventListener("click", () => {
-            modal.style.display = "none";
-        });
+        <div id="contenido-modal">
 
-        window.addEventListener("click", (e) => {
-            if (e.target === modal) {
-                modal.style.display = "none";
-            }
-        });
-    });
-</script>
+        </div>
 
+    </div>
 
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/eliminar_cita.js' %}"></script>
+<script src="{% static 'js/editar_cita.js' %}"></script>
 {% endblock %}

@@ -9,4 +9,5 @@ urlpatterns = [
     path('citas/',views.lista_citas, name = "lista_citas"),
     path("", views.dashboard, name="dashboard"),
     path("citas/<int:id_cita>/eliminar/", views.eliminar_cita, name="eliminar_cita"),
+    path("citas/<int:id_cita>/editar/", views.editar_cita, name = "editar_cita"),
 ]

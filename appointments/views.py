@@ -13,6 +13,34 @@ from django.contrib.auth.decorators import login_required
 from .forms import CitaForm
 
 
+@login_required
+def editar_cita(request, id_cita):
+
+    cita = get_object_or_404(Cita, pk=id_cita)
+
+    if request.method == "POST":
+
+        formulario = CitaForm(
+            request.POST,
+            instance=cita
+        )
+
+        if formulario.is_valid():
+            formulario.save()
+            return redirect("lista_citas")
+
+    else:
+
+        formulario = CitaForm(instance=cita)
+
+    return render(
+        request,
+        "citas/_formulario_cita.html",
+        {
+            "formulario": formulario,
+            "cita": cita
+        }
+    )
 
 @login_required
 def crear_cita(request):
