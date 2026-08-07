@@ -54,11 +54,17 @@ def crear_cita(request):
         if form.is_valid():
             cita = form.save(commit=False)
             cita.save()
+            messages.success(
+                request,
+                "La cita se creó correctamente"
+            )
             return redirect('lista_citas')
+
+
     else:
         form = CitaForm(negocio=negocio_usuario)
         
-    return render(request, 'citas/crear_cita.html', {'form': form})
+    return redirect("lista_citas")
 
 @login_required
 def eliminar_cita(request, id_cita):
@@ -83,46 +89,44 @@ def eliminar_cita(request, id_cita):
     )
 
 
-
 @login_required
 def lista_citas(request):
     negocio = request.user.negocio
 
-
-    #Parametros de la URL
     buscar = request.GET.get("buscar", "").strip()
     estado = request.GET.get("estado", "")
     mostrar = int(request.GET.get("mostrar", settings.DEFAULT_PAGE_SIZE))
     orden = request.GET.get("orden", "-fecha_cita")
     page = request.GET.get("page", 1)
 
-    #Query inicial
     queryset = (
-        Cita.objects.filter(id_servicio__id_negocio=negocio)
-        .select_related(
-            "id_cliente", "id_servicio"
-        )
+        Cita.objects
+        .filter(id_servicio__id_negocio=negocio)
+        .select_related("id_cliente", "id_servicio")
     )
 
     if buscar:
         queryset = queryset.filter(
-        Q(id_cliente__primer_nombre__icontains=buscar) |
-        Q(id_cliente__primer_apellido__icontains=buscar) |
-        Q(id_cliente__cedula__icontains=buscar) |
-        Q(id_servicio__nombre_servicio__icontains=buscar)
+            Q(id_cliente__primer_nombre__icontains=buscar) |
+            Q(id_cliente__primer_apellido__icontains=buscar) |
+            Q(id_cliente__cedula__icontains=buscar) |
+            Q(id_servicio__nombre_servicio__icontains=buscar)
+        )
+
+    # ESTE ES EL FORMULARIO QUE APARECERÁ EN EL MODAL
+    formulario = CitaForm(
+        negocio=negocio
     )
 
-    #Contexto 
     context = {
         "citas": queryset,
-        "buscar" : buscar,
-        "estado" : estado,
-        "mostrar" : mostrar ,
-        "orden" : orden ,
-        "page": page ,
-
+        "buscar": buscar,
+        "estado": estado,
+        "mostrar": mostrar,
+        "orden": orden,
+        "page": page,
+        "formulario": formulario,
     }
-
 
     return render(
         request,

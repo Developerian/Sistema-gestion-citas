@@ -19,21 +19,15 @@ Listado de Citas
 
     <h3>Historial de citas</h3>
 
-    <a href="{% url 'crear_cita' %}" class="btn-save" style="width:auto;text-decoration:none;padding:10px 20px;">
-
+    <button type="button" id="btn-abrir-crear" class="btn-save" style="width:auto; padding:10px 20px;">
         Nueva cita
-
-    </a>
+    </button>
 
 </div>
 
 <form method="get">
 
-    <input
-        type="text"
-        name="buscar"
-        placeholder="Buscar cliente..."
-        value="{{ buscar }}">
+    <input type="text" name="buscar" placeholder="Buscar cliente..." value="{{ buscar }}">
 
     <button type="submit">
         Buscar
@@ -41,86 +35,21 @@ Listado de Citas
 
 </form>
 
-<table class="table-citas">
-
-    <thead>
-
-        <tr>
-            <th>Cliente</th>
-            <th>Servicio</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-
-    </thead>
-
-
-    <tbody>
-
-        {% for cita in citas %}
-
-        <tr>
-
-            <td>{{ cita.id_cliente }}</td>
-
-            <td>{{ cita.id_servicio }}</td>
-
-            <td>{{ cita.fecha_cita }}</td>
-
-            <td>{{ cita.hora_cita }}</td>
-
-            <td>
-                <span class="badge">
-                    {{ cita.estado }}
-                </span>
-            </td>
-
-
-            <td>
-                
-                <button class="btn-open-delete" data-url="{% url 'eliminar_cita' cita.id_cita %}"">
-                    Eliminar
-                </button>
-
-            
-                <button class="btn-open-update" data-id="{{cita.id_cita}}" data-cliente="{{cita.id_cliente}}">
-                    Editar
-                </button>
-                
-            </td>
-
-
-        </tr>
-
-
-        {% empty %}
-
-        <tr>
-
-            <td colspan="6" class="empty-msg">
-                No existen citas registradas.
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-
-    </tbody>
-
-</table>
+<!-- Table-->
+{% include "citas/partials/tablas_citas.html" %}
 
 
 
 <!-- MODAL -->
-{% include "citas/_modal_eliminar.html" %}
-{% include "citas/_modal_editar.html" %}
+{% include "citas/partials/create/_modal_crear.html" %}
+{% include "citas/partials/delete/_modal_eliminar.html" %}
+{% include "citas/partials/update/_modal_editar.html" %}
 
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/eliminar_cita.js' %}"></script>
-<script src="{% static 'js/editar_cita.js' %}"></script>
+
+<script src="{% static 'js/citas/eliminar_cita.js' %}"></script>
+<script src="{% static 'js/citas/editar_cita.js' %}"></script>
+<script src="{% static 'js/citas/crear.js'%}"></script>>
 {% endblock %}

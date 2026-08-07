@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 
+
 <body>
 
     {% if messages %}
@@ -42,7 +43,7 @@
 
     <div class="sidebar">
 
-        <h2>Panel Negocio</h2>
+        <h2>Panel Administrativo</h2>
 
         <a href="{% url 'dashboard' %}">
             Inicio
@@ -64,6 +65,14 @@
 
         <a href="#">
             Empleados
+        </a>
+
+        <a href = "#">
+            Pagos
+        </a>
+
+        <a href = "#">
+            Configuración
         </a>
 
     </div>
@@ -90,11 +99,12 @@
         {% block content %}
         {% endblock %}
 
-        {% block scripts %}
-        {% endblock %}
+
 
     </div>
 
+    {% block scripts %}
+    {% endblock %}
 </body>
 
 </html>

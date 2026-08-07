@@ -1,0 +1,29 @@
+<div id="modal-crear" class="modal oculto">
+
+    <div class="modal-content">
+
+        <button
+            type="button"
+            id="cerrar-modal-crear"
+            class="close-btn"
+            aria-label="Cerrar">
+            ×
+        </button>
+
+        <h2>Nueva cita</h2>
+
+        <form method="POST" action="{% url 'crear_cita' %}">
+
+            {% csrf_token %}
+
+            {% include "citas/partials/create/_formulario_crear.html" %}
+
+            <button type="submit">
+                Guardar cita
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
