@@ -137,3 +137,7 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 
 # A dónde mandar al usuario si intenta entrar a una página protegida sin iniciar sesión
 LOGIN_URL = '/auth/login/'
+
+DEFAULT_PAGE_SIZE = 10
+PAGE_SIZE_OPTIONS = [5, 10, 20, 50]
+

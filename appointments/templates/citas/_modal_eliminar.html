@@ -1,0 +1,19 @@
+
+<div id="modalEliminar" class="modal oculto">
+    <div class="modal-content">
+        <h3>Eliminar cita</h3>
+        <p id="mensajeEliminar">¿Estás seguro de que deseas eliminar esta cita?</p>
+
+        <form id="formEliminar" method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button type="submit" class="btn-delete">
+                    Sí, eliminar
+                </button>
+                <button type="button" id="cerrarModal">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

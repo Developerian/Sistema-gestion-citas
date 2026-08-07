@@ -27,6 +27,19 @@ Listado de Citas
 
 </div>
 
+<form method="get">
+
+    <input
+        type="text"
+        name="buscar"
+        placeholder="Buscar cliente..."
+        value="{{ buscar }}">
+
+    <button type="submit">
+        Buscar
+    </button>
+
+</form>
 
 <table class="table-citas">
 
@@ -67,13 +80,11 @@ Listado de Citas
 
             <td>
                 
-                <button class="btn-open-delete" data-id="{{ cita.id_cita }}" data-cliente="{{ cita.id_cliente }}">
+                <button class="btn-open-delete" data-url="{% url 'eliminar_cita' cita.id_cita %}"">
                     Eliminar
                 </button>
 
-            </td>
-
-            <td>
+            
                 <button class="btn-open-update" data-id="{{cita.id_cita}}" data-cliente="{{cita.id_cliente}}">
                     Editar
                 </button>
@@ -104,40 +115,9 @@ Listado de Citas
 
 
 <!-- MODAL -->
-<div id="modalEliminar" class="modal oculto">
-    <div class="modal-content">
-        <h3>Eliminar cita</h3>
-        <p id="mensajeEliminar">¿Estás seguro de que deseas eliminar esta cita?</p>
+{% include "citas/_modal_eliminar.html" %}
+{% include "citas/_modal_editar.html" %}
 
-        <form id="formEliminar" method="post">
-            {% csrf_token %}
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button type="submit" class="btn-delete">
-                    Sí, eliminar
-                </button>
-                <button type="button" id="cerrarModal">
-                    Cancelar
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="modal-editar" class="modal oculto">
-
-    <div class="modal-content">
-
-        <span id="cerrar-modal">&times;</span>
-
-        <h2>Editar cita</h2>
-
-        <div id="contenido-modal">
-
-        </div>
-
-    </div>
-
-</div>
 {% endblock %}
 
 {% block scripts %}

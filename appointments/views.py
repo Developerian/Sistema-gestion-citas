@@ -6,6 +6,8 @@ from appointments.models import Cita
 from .forms import ClienteForm, Cliente
 from .forms import CitaForm
 from django.contrib import messages
+from django.conf import settings
+from django.db.models import Q
 
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
@@ -27,11 +29,12 @@ def editar_cita(request, id_cita):
 
         if formulario.is_valid():
             formulario.save()
+            messages.success(request, "La cita se ha editado exitosamente")
             return redirect("lista_citas")
 
     else:
 
-        formulario = CitaForm(instance=cita)
+        formulario = CitaForm(instance=cita, negocio=request.user.negocio)
 
     return render(
         request,
@@ -60,6 +63,7 @@ def crear_cita(request):
 @login_required
 def eliminar_cita(request, id_cita):
     negocio = request.user.negocio
+
     cita = get_object_or_404(
         Cita, 
         id_cita = id_cita, 
@@ -83,12 +87,43 @@ def eliminar_cita(request, id_cita):
 @login_required
 def lista_citas(request):
     negocio = request.user.negocio
-    citas = Cita.objects.filter(
-        id_servicio__id_negocio=negocio
+
+
+    #Parametros de la URL
+    buscar = request.GET.get("buscar", "").strip()
+    estado = request.GET.get("estado", "")
+    mostrar = int(request.GET.get("mostrar", settings.DEFAULT_PAGE_SIZE))
+    orden = request.GET.get("orden", "-fecha_cita")
+    page = request.GET.get("page", 1)
+
+    #Query inicial
+    queryset = (
+        Cita.objects.filter(id_servicio__id_negocio=negocio)
+        .select_related(
+            "id_cliente", "id_servicio"
+        )
     )
+
+    if buscar:
+        queryset = queryset.filter(
+        Q(id_cliente__primer_nombre__icontains=buscar) |
+        Q(id_cliente__primer_apellido__icontains=buscar) |
+        Q(id_cliente__cedula__icontains=buscar) |
+        Q(id_servicio__nombre_servicio__icontains=buscar)
+    )
+
+    #Contexto 
     context = {
-        "citas": citas
+        "citas": queryset,
+        "buscar" : buscar,
+        "estado" : estado,
+        "mostrar" : mostrar ,
+        "orden" : orden ,
+        "page": page ,
+
     }
+
+
     return render(
         request,
         "citas/lista_citas.html",
