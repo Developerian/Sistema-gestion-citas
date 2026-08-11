@@ -2,30 +2,29 @@
 {% load static %}
 
 {% block title %}
-Listado de clientes
+Listado de servicios
 {% endblock %}
 
-{% block menu_clientes %}
+{% block menu_servicios %}
 active
 {% endblock %}
 
 {% block encabezado %}
-Listado de Clientes
+Listado de Servicios
 {% endblock %}
 
 {% block content %}
 
-<!-- Barra de herramientas -->
-
 <div class="toolbar-container">
 
     <!-- Búsqueda -->
-    <form method="GET" action="{% url 'clientes' %}" class="search-form">
+
+    <form method="GET" action="{% url 'servicios' %}" class="search-form">
 
         <input
             type="text"
             name="buscar"
-            placeholder="Buscar cliente..."
+            placeholder="Buscar servicio..."
             value="{{ buscar }}"
             class="search-input"
         >
@@ -42,37 +41,42 @@ Listado de Clientes
 
     <div class="actions-group">
 
-        <!-- Filtros -->
         <button
             type="button"
             class="btn btn-filter"
             id="btnOpenFilterModal">
+
+            <i class="bi bi-funnel"></i>
             Filtros avanzados
+
         </button>
 
 
-        <!-- Más acciones -->
         <div class="dropdown-actions">
 
             <button
                 type="button"
-                class="btn-more">
+                class="btn-more"
+                aria-label="Más acciones">
+
                 <i class="bi bi-three-dots-vertical"></i>
-                
+
             </button>
 
         </div>
 
 
-        <!-- Crear cliente -->
+        <!-- Crear -->
+
         <button
             type="button"
-            data-abrir-modal="modal-crear-cliente"
+            data-abrir-modal="modal-crear-servicio"
             class="btn-save"
             style="width:auto; padding:10px 20px;">
 
-            <i class="bi bi-person-plus"></i> 
-            Agregar cliente
+            <i class="bi bi-plus-circle"></i>
+            Agregar servicio
+
         </button>
 
     </div>
@@ -82,11 +86,16 @@ Listado de Clientes
 
 <!-- Tabla -->
 
-{% include "citas/partials/tabla_clientes.html" %}
+{% include "citas/partials/tabla_servicios.html" %}
 
 
-<!-- Modal de creación -->
-{% include "citas/partials/create/_modal_crear_cliente.html" %}
+<!-- Modales -->
+
+{% include "citas/partials/create/_modal_crear_servicio.html" %}
+
+{% include "citas/partials/update/_modal_editar_servicio.html" %}
+
+{% include "citas/partials/delete/_modal_eliminar_servicio.html" %}
 
 
 {% endblock %}

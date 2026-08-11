@@ -1,0 +1,39 @@
+<div id="modal-editar-servicio" class="modal oculto">
+
+    <div class="modal-content">
+
+        <button
+            type="button"
+            data-cerrar-modal
+            class="close-btn"
+            aria-label="Cerrar">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+
+        <h2>Editar servicio</h2>
+
+
+        <form
+            method="POST">
+
+            {% csrf_token %}
+
+            {% include "citas/partials/create/_formulario_servicio.html" %}
+
+            <button
+                type="submit"
+                class="btn-save">
+
+                <i class="bi bi-check-lg"></i>
+                Guardar cambios
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,37 @@
+{% csrf_token %}
+
+{% if formulario.non_field_errors %}
+
+<div class="form-errors">
+
+    {% for error in formulario.non_field_errors %}
+        <span>{{ error }}</span>
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+{% for field in formulario %}
+
+```
+<div class="form-group">
+
+    <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+
+    {{ field }}
+
+    {% for error in field.errors %}
+
+        <span class="form-error">
+            {{ error }}
+        </span>
+
+    {% endfor %}
+
+</div>
+```
+
+{% endfor %}

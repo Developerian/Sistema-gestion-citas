@@ -1,0 +1,55 @@
+<div id="modal-eliminar-servicio" class="modal oculto">
+
+    <div class="modal-content">
+
+        <button
+            type="button"
+            data-cerrar-modal
+            class="close-btn"
+            aria-label="Cerrar">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+
+        <h2>Eliminar servicio</h2>
+
+        <p>
+            ¿Está seguro de que desea eliminar este servicio?
+        </p>
+
+
+        <form
+            method="POST">
+
+            {% csrf_token %}
+
+            <div class="actions-group">
+
+                <button
+                    type="button"
+                    data-cerrar-modal
+                    class="btn">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-delete">
+
+                    <i class="bi bi-trash"></i>
+                    Eliminar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

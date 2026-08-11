@@ -348,3 +348,138 @@ body {
     color: var(--text-muted);
     padding: 20px;
 }
+
+
+/* --- Sidebar Base --- */
+
+.sidebar {
+    width: 72px;
+    background-color: #1e1e2f;
+    color: white;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar:hover {
+    width: 240px;
+}
+
+
+/* --- Items de la barra lateral --- */
+
+.sidebar-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    height: 48px;
+    padding: 0 0 0 18px;
+    margin: 4px 10px;
+    color: #cbd5e1;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+}
+
+.sidebar-item i {
+    font-size: 20px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+
+/* --- Etiquetas de texto del menú --- */
+
+.sidebar-label {
+    margin-left: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    display: inline-block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.sidebar:hover .sidebar-label {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+/* --- Perfil del Usuario --- */
+
+.sidebar-profile {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 0 0 18px;
+    margin: 0 10px 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.profile-icon {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #818cf8;
+    flex-shrink: 0;
+}
+
+.profile-icon i {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 14px;
+    opacity: 0;
+    max-width: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.15s ease, max-width 0.2s ease;
+}
+
+.profile-info strong {
+    font-size: 14px;
+    color: white;
+    line-height: 18px;
+}
+
+.profile-info span {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 16px;
+}
+
+.sidebar:hover .profile-info {
+    opacity: 1;
+    max-width: 160px;
+    pointer-events: auto;
+}

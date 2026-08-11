@@ -1,18 +1,12 @@
 # appointments/views.py
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from appointments.models import Cita
-from .forms import ClienteForm, Cliente
-from .forms import CitaForm
+from django.shortcuts import get_object_or_404, render, redirect
+
+from appointments.models import Cita, Cliente, Servicio
+from .forms import ClienteForm, CitaForm, ServicioForm
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
-
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import CitaForm
 
 # === Crud de citas ===
 @login_required
@@ -156,8 +150,6 @@ def dashboard(request):
         "dashboard/inicio.html"
     )
 
-
-
 # === Crud clientes ===
 @login_required
 def lista_clientes(request):
@@ -261,3 +253,136 @@ def eliminar_cliente(request, id_cliente):
     cliente.delete()
 
     return redirect("clientes")
+
+# Crud de servicios profesionales
+
+@login_required
+def lista_servicios(request):
+    negocio = request.user.empleado.negocio
+
+    buscar = request.GET.get("buscar", "").strip()
+
+    servicios = Servicio.objects.filter(
+        id_negocio=negocio
+    )
+
+    if buscar:
+        servicios = servicios.filter(
+            Q(nombre_servicio__icontains=buscar) |
+            Q(descripcion__icontains=buscar)
+        )
+
+    formulario = ServicioForm()
+
+    context = {
+        "servicios": servicios,
+        "buscar": buscar,
+        "formulario": formulario,
+    }
+
+    return render(
+        request,
+        "citas/servicios.html",
+        context
+    )
+
+@login_required
+def crear_servicio(request):
+    negocio = request.user.empleado.negocio
+
+    if request.method == "POST":
+
+        formulario = ServicioForm(request.POST)
+
+        if formulario.is_valid():
+
+            servicio = formulario.save(commit=False)
+            servicio.id_negocio = negocio
+            servicio.save()
+
+            messages.success(
+                request,
+                "El servicio se creó correctamente."
+            )
+
+            return redirect("servicios")
+
+    else:
+        formulario = ServicioForm()
+
+    return render(
+        request,
+        "citas/partials/create/_formulario_servicio.html",
+        {
+            "formulario": formulario
+        }
+    )
+
+@login_required
+def editar_servicio(request, id_servicio):
+    negocio = request.user.empleado.negocio
+
+    servicio = get_object_or_404(
+        Servicio,
+        pk=id_servicio,
+        id_negocio=negocio
+    )
+
+    if request.method == "POST":
+        formulario = ServicioForm(
+            request.POST,
+            instance=servicio
+        )
+
+        if formulario.is_valid():
+            formulario.save()
+
+            messages.success(
+                request,
+                "El servicio fue editado exitosamente"
+            )
+
+            return redirect("servicios")
+
+    else:
+        formulario = ServicioForm(
+            instance=servicio
+        )
+
+    return render(
+        request,
+        "citas/partials/update/_formulario_servicio.html",
+        {
+            "formulario": formulario,
+            "servicio": servicio,
+        }
+    )
+
+@login_required
+def eliminar_servicio(request, id_servicio):
+    negocio = request.user.empleado.negocio
+
+    servicio = get_object_or_404(
+        Servicio,
+        pk=id_servicio,
+        id_negocio=negocio
+    )
+
+    if request.method == "POST":
+        servicio.delete()
+
+        messages.success(
+            request,
+            "El servicio se ha eliminado exitosamente"
+        )
+
+        return redirect("servicios")
+
+    return render(
+        request,
+        "citas/eliminar_servicio.html",
+        {
+            "servicio": servicio,
+        }
+    )
+

@@ -36,14 +36,6 @@
 
 
             <td>
-                
-                <button
-                    type = "button"
-                    class="btn-open-update"
-                    data-abrir-modal="modal-eliminar-cita"
-                    data-url="{% url 'eliminar_cita' cita.id_cita %}">
-                    Eliminar
-                </button>       
                 <button
                     type="button"
                     class="btn-open-update"
@@ -51,8 +43,19 @@
                     hx-get="{% url 'editar_cita' cita.id_cita %}"
                     hx-target="#contenido-modal"
                     hx-swap="innerHTML">
-                    Editar
+
+                    <i class="bi bi-pencil-fill"></i>
                 </button>
+                
+                <button
+                    type = "button"
+                    class="btn-open-update"
+                    data-abrir-modal="modal-eliminar-cita"
+                    data-url="{% url 'eliminar_cita' cita.id_cita %}">
+                    <i class="bi bi-trash-fill"></i>
+                    
+                </button>       
+
                 
             </td>
 

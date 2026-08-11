@@ -1,0 +1,40 @@
+<div id="modal-crear-servicio" class="modal oculto">
+
+    <div class="modal-content">
+
+        <button
+            type="button"
+            data-cerrar-modal
+            class="close-btn"
+            aria-label="Cerrar">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+
+        <h2>Nuevo servicio</h2>
+
+
+        <form
+            method="POST"
+            action="{% url 'crear_servicio' %}">
+
+            {% csrf_token %}
+
+            {% include "citas/partials/create/_formulario_servicio.html" %}
+
+            <button
+                type="submit"
+                class="btn-save">
+
+                <i class="bi bi-check-lg"></i>
+                Guardar servicio
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

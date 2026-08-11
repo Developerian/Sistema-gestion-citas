@@ -1,0 +1,79 @@
+<table class="table-citas">
+
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Duración</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for servicio in servicios %}
+
+        <tr>
+
+            <td>
+                {{ servicio.nombre_servicio }}
+            </td>
+
+            <td>
+                {{ servicio.descripcion }}
+            </td>
+
+            <td>
+                ${{ servicio.precio }}
+            </td>
+
+            <td>
+                <i class="bi bi-clock"></i>
+                {{ servicio.duracion_minutos }} min
+            </td>
+
+            <td>
+
+                <div class="actions-group">
+
+                    <!-- EDITAR -->
+
+                    <button type="button" class="btn-edit" data-abrir-modal="modal-editar-servicio"
+                        data-url="{% url 'editar_servicio' servicio.id_servicio %}" title="Editar servicio">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                    </button>
+
+
+                    <!-- ELIMINAR -->
+
+                    <button type="button" class="btn-delete" data-abrir-modal="modal-eliminar-servicio"
+                        data-url="{% url 'eliminar_servicio' servicio.id_servicio %}" title="Eliminar servicio">
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="7">
+                No hay servicios registrados.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>

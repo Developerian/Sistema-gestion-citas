@@ -42,43 +42,60 @@
     {% endif %}
 
 
-
-    <div class="sidebar">
-
-        <h2>Panel Administrativo</h2>
-
-        <a href="{% url 'dashboard' %}">
-            Inicio
-        </a>
-
-        <a href="{% url 'lista_citas' %}"
-           class="{% block menu_citas %}{% endblock %}">
-            Citas
-        </a>
-
-        <a href="{% url 'clientes' %}"
-           class="{% block menu_clientes %}{% endblock %}">
-            Clientes
-        </a>
-
-        <a href="#">
-            Servicios
-        </a>
-
-        <a href="#">
-            Empleados
-        </a>
-
-        <a href = "#">
-            Pagos
-        </a>
-
-        <a href = "#">
-            Configuración
-        </a>
-
+<aside class="sidebar" 
+       hx-target=".main-content" 
+       hx-select=".main-content" 
+       hx-swap="outerHTML" 
+       hx-push-url="true">
+    
+    <!-- Perfil del usuario -->
+    <div class="sidebar-profile" hx-history="false"> 
+        <div class="profile-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>  
+        <div class="profile-info">
+            <strong>{{ request.user.get_full_name }}</strong>
+            <span>{{ request.user.empleado.rol.nombre_rol }}</span>
+        </div>
     </div>
 
+
+    <a href="{% url 'dashboard' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="bi bi-house"></i>
+        <span class="sidebar-label">Inicio</span>
+    </a>
+
+    <a href="{% url 'lista_citas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'lista_citas' %}active{% endif %}">
+        <i class="bi bi-calendar-check"></i>
+        <span class="sidebar-label">Citas</span>
+    </a>
+
+    <a href="{% url 'clientes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'clientes' %}active{% endif %}">
+        <i class="bi bi-people"></i>
+        <span class="sidebar-label">Clientes</span>
+    </a>
+
+    <a href="{% url 'servicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'servicios' %}active{% endif %}">
+        <i class="bi bi-scissors"></i>
+        <span class="sidebar-label">Servicios</span>
+    </a>
+
+    <a href="#" class="sidebar-item">
+        <i class="bi bi-person-vcard-fill"></i>
+        <span class="sidebar-label">Empleados</span>
+    </a>
+
+    <a href="#" class="sidebar-item">
+        <i class="bi bi-currency-dollar"></i>
+        <span class="sidebar-label">Pagos</span>
+    </a>
+
+    <a href="#" class="sidebar-item">
+        <i class="bi bi-gear"></i>
+        <span class="sidebar-label">Configuración</span>
+    </a>
+
+</aside>
 
     <div class="main-content">
 

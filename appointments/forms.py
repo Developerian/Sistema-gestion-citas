@@ -79,3 +79,48 @@ class ClienteForm(forms.ModelForm):
             "email": forms.EmailInput(attrs={"class": "form-input"}),
             "celular": forms.TextInput(attrs={"class": "form-input"}),
         }
+
+class ServicioForm(forms.ModelForm):
+    class Meta:
+        model = Servicio
+        fields = [
+            'nombre_servicio',
+            'descripcion',
+            'precio',
+            'duracion_minutos',
+        ]
+
+        labels = {
+            'nombre_servicio': 'Nombre del servicio',
+            'descripcion': 'Descripción',
+            'precio': 'Precio',
+            'duracion_minutos': 'Duración en minutos',
+        }
+
+        widgets = {
+            'nombre_servicio': forms.TextInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Ej. Corte de cabello',
+                }
+            ),
+            'descripcion': forms.TextInput(
+                attrs={
+                    'class': 'form-input',
+                    'placeholder': 'Descripción del servicio',
+                }
+            ),
+            'precio': forms.NumberInput(
+                attrs={
+                    'class': 'form-input',
+                    'step': '0.01',
+                    'min': '0',
+                }
+            ),
+            'duracion_minutos': forms.NumberInput(
+                attrs={
+                    'class': 'form-input',
+                    'min': '0',
+                }
+            ),
+        }
