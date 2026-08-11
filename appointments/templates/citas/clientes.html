@@ -2,28 +2,30 @@
 {% load static %}
 
 {% block title %}
-Listado de citas
+Listado de clientes
 {% endblock %}
 
-{% block menu_citas %}
+{% block menu_clientes %}
 active
 {% endblock %}
 
 {% block encabezado %}
-Listado de Citas
+Listado de Clientes
 {% endblock %}
 
 {% block content %}
 
+<!-- Barra de herramientas -->
+
 <div class="toolbar-container">
 
     <!-- Búsqueda -->
-    <form method="GET" action="{% url 'lista_citas' %}" class="search-form">
+    <form method="GET" action="{% url 'clientes' %}" class="search-form">
 
         <input
             type="text"
             name="buscar"
-            placeholder="Buscar cita..."
+            placeholder="Buscar cliente..."
             value="{{ buscar }}"
             class="search-input"
         >
@@ -36,6 +38,7 @@ Listado de Citas
 
 
     <!-- Acciones -->
+
     <div class="actions-group">
 
         <!-- Filtros -->
@@ -47,7 +50,7 @@ Listado de Citas
         </button>
 
 
-        <!-- Menú de más acciones -->
+        <!-- Más acciones -->
         <div class="dropdown-actions">
 
             <button
@@ -56,25 +59,16 @@ Listado de Citas
                 ⋮
             </button>
 
-            <!-- Aquí posteriormente puedes colocar:
-                 - Mostrar 5
-                 - Mostrar 10
-                 - Mostrar 20
-                 - Ordenar
-                 - Exportar
-                 - etc.
-            -->
-
         </div>
 
 
-        <!-- Crear cita -->
+        <!-- Crear cliente -->
         <button
             type="button"
-            data-abrir-modal="modal-crear-cita"
+            data-abrir-modal="modal-crear-cliente"
             class="btn-save"
             style="width:auto; padding:10px 20px;">
-            + Nueva cita
+            + Agregar cliente
         </button>
 
     </div>
@@ -84,13 +78,11 @@ Listado de Citas
 
 <!-- Tabla -->
 
-{% include "citas/partials/tablas_citas.html" %}
+{% include "citas/partials/tabla_clientes.html" %}
 
 
-<!-- Modales -->
+<!-- Modal de creación -->
+{% include "citas/partials/create/_modal_crear_cliente.html" %}
 
-{% include "citas/partials/create/_modal_crear.html" %}
-{% include "citas/partials/delete/_modal_eliminar.html" %}
-{% include "citas/partials/update/_modal_editar.html" %}
 
 {% endblock %}

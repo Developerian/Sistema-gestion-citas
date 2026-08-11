@@ -4,10 +4,19 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('citas/nueva/', views.crear_cita, name='crear_cita'),
-    path('clientes/', views.clientes_view, name='clientes'),
-    path('citas/',views.lista_citas, name = "lista_citas"),
+    #Dashboard
     path("", views.dashboard, name="dashboard"),
+
+    #Rutas citas
+    path('citas/nueva/', views.crear_cita, name='crear_cita'),
+    path('citas/',views.lista_citas, name = "lista_citas"),
     path("citas/<int:id_cita>/eliminar/", views.eliminar_cita, name="eliminar_cita"),
     path("citas/<int:id_cita>/editar/", views.editar_cita, name = "editar_cita"),
+
+
+    #Url clientes
+    path("clientes/", views.lista_clientes, name="clientes"),
+    path("clientes/nuevo/", views.crear_cliente, name="crear_cliente"),
+    path("clientes/<int:id_cliente>/editar/", views.editar_cliente, name="editar_cliente"),
+    path("clientes/<int:id_cliente>/eliminar/", views.eliminar_cliente, name="eliminar_cliente"),
 ]

@@ -1,0 +1,21 @@
+<div id="modal-crear-cliente" class="modal oculto">
+    <div class="modal-content">
+        <button type="button" class="btn-close" data-cerrar-modal>&times;</button>
+
+        <h3>Registrar Cliente</h3>
+
+        <form method="POST" action="{% url 'crear_cliente' %}">
+            {% csrf_token %}
+            
+            <div class="form-body">
+                {{ formulario.as_p }}
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-save">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

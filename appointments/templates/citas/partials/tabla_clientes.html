@@ -1,0 +1,52 @@
+<table class="table-citas">
+    <thead>
+        <tr>
+            <th>Apellidos</th>
+            <th>Nombres</th>
+            <th>Cédula</th>
+            <th>Correo electrónico</th>
+            <th>Celular</th>
+            <th>Fecha de registro</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.primer_apellido }}</td>
+            <td>{{ cliente.primer_nombre }}</td>
+            <td>{{ cliente.cedula|default:"-" }}</td>
+            <td>{{ cliente.email|default:"-" }}</td>
+            <td>{{ cliente.celular|default:"-" }}</td>
+            <td>{{ cliente.fecha_registro|date:"d/m/Y H:i" }}</td>
+            <td class="actions-cell">
+                <!-- Botón Editar -->
+                <button 
+                    type="button" 
+                    class="btn-action edit-action-btn" 
+                    data-id="{{ cliente.id_cliente }}"
+                    title="Editar"
+                >
+                    ✏️
+                </button>
+                <!-- Botón Eliminar -->
+                <button 
+                    type="button" 
+                    class="btn-action delete-action-btn" 
+                    data-id="{{ cliente.id_cliente }}"
+                    title="Eliminar"
+                >
+                    🗑️
+                </button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="empty-msg">
+                No existen clientes registrados.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

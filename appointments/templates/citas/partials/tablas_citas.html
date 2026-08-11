@@ -37,12 +37,20 @@
 
             <td>
                 
-                <button class="btn-open-delete" data-url="{% url 'eliminar_cita' cita.id_cita %}"">
+                <button
+                    type = "button"
+                    class="btn-open-update"
+                    data-abrir-modal="modal-eliminar-cita"
+                    data-url="{% url 'eliminar_cita' cita.id_cita %}">
                     Eliminar
-                </button>
-
-            
-                <button class="btn-open-update" data-id="{{cita.id_cita}}" data-cliente="{{cita.id_cliente}}">
+                </button>       
+                <button
+                    type="button"
+                    class="btn-open-update"
+                    data-abrir-modal="modal-editar-cita"
+                    hx-get="{% url 'editar_cita' cita.id_cita %}"
+                    hx-target="#contenido-modal"
+                    hx-swap="innerHTML">
                     Editar
                 </button>
                 
