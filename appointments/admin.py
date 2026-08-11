@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Cita, Servicio
+from .models import Cliente, Cita, Empleado, Servicio
 
 
 @admin.register(Cliente)
@@ -44,4 +44,14 @@ class CitaAdmin(admin.ModelAdmin):
     list_filter = (
         'estado',
         'fecha_cita'
+    )
+
+@admin.register(Empleado)
+class EmpleadoAdmin(admin.ModelAdmin):
+    list_display = (
+        'usuario',
+        'negocio',
+        'rol',
+        'celular',
+        'estado',
     )

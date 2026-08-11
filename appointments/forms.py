@@ -43,9 +43,10 @@ class CitaForm(forms.ModelForm):
             # 2. Filtramos clientes que pertenecen al negocio
             self.fields['id_cliente'].queryset = Cliente.objects.filter(id_negocio=negocio)
             
-            # 3. Filtramos usuarios (empleados) que pertenecen al mismo negocio
-            self.fields['id_usuario'].queryset = Usuario.objects.filter(negocio=negocio)
-            
+            # Empleados del negocio
+            self.fields["id_usuario"].queryset = Usuario.objects.filter(
+                empleado__negocio=negocio
+            )
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente

@@ -18,7 +18,7 @@ from .forms import CitaForm
 @login_required
 def editar_cita(request, id_cita):
 
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     cita = get_object_or_404(
         Cita,
@@ -61,7 +61,7 @@ def editar_cita(request, id_cita):
 
 @login_required
 def crear_cita(request):
-    negocio_usuario = request.user.negocio
+    negocio_usuario = request.user.empleado.negocio
     
     if request.method == 'POST':
         form = CitaForm(request.POST, negocio=negocio_usuario)
@@ -82,7 +82,7 @@ def crear_cita(request):
 
 @login_required
 def eliminar_cita(request, id_cita):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     cita = get_object_or_404(
         Cita, 
@@ -102,9 +102,10 @@ def eliminar_cita(request, id_cita):
         }
     )
 
+
 @login_required
 def lista_citas(request):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     buscar = request.GET.get("buscar", "").strip()
     estado = request.GET.get("estado", "")
@@ -160,7 +161,7 @@ def dashboard(request):
 # === Crud clientes ===
 @login_required
 def lista_clientes(request):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     buscar = request.GET.get("buscar", "").strip()
 
@@ -191,7 +192,7 @@ def lista_clientes(request):
 
 @login_required
 def crear_cliente(request):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     if request.method == "POST":
         formulario = ClienteForm(request.POST)
@@ -215,7 +216,7 @@ def crear_cliente(request):
 
 @login_required
 def editar_cliente(request, id_cliente):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     cliente = get_object_or_404(
         Cliente,
@@ -249,7 +250,7 @@ def editar_cliente(request, id_cliente):
 
 @login_required
 def eliminar_cliente(request, id_cliente):
-    negocio = request.user.negocio
+    negocio = request.user.empleado.negocio
 
     cliente = get_object_or_404(
         Cliente,

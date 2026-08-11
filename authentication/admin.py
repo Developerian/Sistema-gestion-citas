@@ -5,18 +5,32 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Rol, Negocio, Usuario
 
 # Registramos los modelos simples
-admin.site.register(Rol)
-admin.site.register(Negocio)
 
-# Para el Usuario personalizado, usamos una configuración extendida en el panel
 @admin.register(Usuario)
 class CustomUserAdmin(UserAdmin):
-    # Esto define qué campos se muestran en la lista del panel
-    list_display = ('username', 'email', 'rol', 'negocio', 'estado', 'is_staff')
+    list_display = (
+        'username',
+        'email',
+        'estado',
+        'is_staff',
+        'is_active',
+    )
+
+
+@admin.register(Rol)
+class RolAdmin(admin.ModelAdmin):
+    list_display = (
+        'id_rol',
+        'nombre_rol',
+        'descripcion',
+    )
     
-    # Esto permite editar los nuevos campos desde el formulario del administrador
-    fieldsets = UserAdmin.fieldsets + (
-        ('Información de Citas', {
-            'fields': ('rol', 'negocio', 'celular', 'estado'),
-        }),
+@admin.register(Negocio)
+class NegocioAdmin(admin.ModelAdmin):
+    list_display = (
+        'id_negocio',
+        'nombre',
+        'ruc',
+        'tipo_negocio',
+        'estado',
     )

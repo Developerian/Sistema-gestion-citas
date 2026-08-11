@@ -43,16 +43,8 @@ class Usuario(AbstractUser):
     class EstadoUsuario(models.TextChoices):
         ACTIVO = 'ACTIVO', 'Activo / Trabajando'
         INACTIVO = 'INACTIVO', 'Inactivo'
-        VACACIONES = 'VACACIONES', 'En Vacaciones'
-        PERMISO = 'PERMISO', 'Permiso Médico / Licencia'
-        SUSPENDIDO = 'SUSPENDIDO', 'Suspendido Temporalmente'
-        DESPEDIDO = 'DESPEDIDO', 'Despedido / Fuera de la Empresa'
-
-    id_usuario = models.AutoField(primary_key=True)
-    rol = models.ForeignKey(Rol, on_delete=models.PROTECT, null=True, blank=True)
-    negocio = models.ForeignKey(Negocio, on_delete=models.CASCADE, null=True, blank=True) 
-    celular = models.CharField(max_length=20, blank=True, null=True)
-
+        PRUEBA = 'PRUEBA', 'Periodo de prueba'
+        
     estado = models.CharField(
         choices= EstadoUsuario.choices,
         default= EstadoUsuario.ACTIVO
