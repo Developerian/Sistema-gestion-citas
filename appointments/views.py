@@ -1,18 +1,23 @@
 # appointments/views.py
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 
+from appointments.decorators import negocio_required
 from appointments.models import Cita, Cliente, Servicio
-from .forms import ClienteForm, CitaForm, ServicioForm
+from .forms import *
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
 
 # === Crud de citas ===
+@negocio_required
 @login_required
 def editar_cita(request, id_cita):
 
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     cita = get_object_or_404(
         Cita,
@@ -53,9 +58,10 @@ def editar_cita(request, id_cita):
         }
     )
 
+@negocio_required
 @login_required
 def crear_cita(request):
-    negocio_usuario = request.user.empleado.negocio
+    negocio_usuario = request.negocio
     
     if request.method == 'POST':
         form = CitaForm(request.POST, negocio=negocio_usuario)
@@ -74,9 +80,10 @@ def crear_cita(request):
         
     return redirect("lista_citas")
 
+@negocio_required
 @login_required
 def eliminar_cita(request, id_cita):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     cita = get_object_or_404(
         Cita, 
@@ -97,9 +104,10 @@ def eliminar_cita(request, id_cita):
     )
 
 
+@negocio_required
 @login_required
 def lista_citas(request):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     buscar = request.GET.get("buscar", "").strip()
     estado = request.GET.get("estado", "")
@@ -143,6 +151,7 @@ def lista_citas(request):
     )
 
 # Dashboard
+@negocio_required
 @login_required
 def dashboard(request):
     return render(
@@ -151,9 +160,10 @@ def dashboard(request):
     )
 
 # === Crud clientes ===
+@negocio_required
 @login_required
 def lista_clientes(request):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     buscar = request.GET.get("buscar", "").strip()
 
@@ -182,9 +192,10 @@ def lista_clientes(request):
         context
     )
 
+@negocio_required
 @login_required
 def crear_cliente(request):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     if request.method == "POST":
         formulario = ClienteForm(request.POST)
@@ -206,9 +217,10 @@ def crear_cliente(request):
         {"formulario": formulario},
     )
 
+@negocio_required
 @login_required
 def editar_cliente(request, id_cliente):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     cliente = get_object_or_404(
         Cliente,
@@ -240,9 +252,10 @@ def editar_cliente(request, id_cliente):
         }
     )
 
+@negocio_required
 @login_required
 def eliminar_cliente(request, id_cliente):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     cliente = get_object_or_404(
         Cliente,
@@ -255,10 +268,10 @@ def eliminar_cliente(request, id_cliente):
     return redirect("clientes")
 
 # Crud de servicios profesionales
-
+@negocio_required
 @login_required
 def lista_servicios(request):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     buscar = request.GET.get("buscar", "").strip()
 
@@ -286,9 +299,10 @@ def lista_servicios(request):
         context
     )
 
+@negocio_required
 @login_required
 def crear_servicio(request):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     if request.method == "POST":
 
@@ -318,9 +332,10 @@ def crear_servicio(request):
         }
     )
 
+@negocio_required
 @login_required
 def editar_servicio(request, id_servicio):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     servicio = get_object_or_404(
         Servicio,
@@ -358,9 +373,10 @@ def editar_servicio(request, id_servicio):
         }
     )
 
+@negocio_required
 @login_required
 def eliminar_servicio(request, id_servicio):
-    negocio = request.user.empleado.negocio
+    negocio = request.negocio
 
     servicio = get_object_or_404(
         Servicio,
@@ -385,4 +401,177 @@ def eliminar_servicio(request, id_servicio):
             "servicio": servicio,
         }
     )
+
+
+# === Crud empleados ===
+
+@login_required
+@negocio_required
+def crear_empleado(request):
+    negocio = request.negocio
+    if request.method == "POST":
+        usuario_form = UsuarioEmpleadoForm(request.POST)
+        empleado_form = EmpleadoForm(
+            request.POST,
+            negocio=negocio
+        )
+        if usuario_form.is_valid() and empleado_form.is_valid():
+            with transaction.atomic():
+                usuario = usuario_form.save(commit=False)
+                usuario.set_password(
+                    usuario_form.cleaned_data["password"]
+                )
+                usuario.save()
+                empleado = empleado_form.save(commit=False)
+                empleado.usuario = usuario
+                empleado.negocio = negocio
+                empleado.save()
+            messages.success(
+                request,
+                "Empleado creado correctamente."
+            )
+            response = HttpResponse(status=204)
+            response["HX-Redirect"] = reverse("empleados")
+            return response
+
+    else:
+        usuario_form = UsuarioEmpleadoForm()
+        empleado_form = EmpleadoForm(
+            negocio=negocio
+        )
+    return render(
+        request,
+        "empleados/partials/create/_formulario_empleado.html",
+        {
+            "usuario_form": usuario_form,
+            "empleado_form": empleado_form,
+        }
+    )
+    
+@login_required
+@negocio_required
+def lista_empleados(request):
+    negocio = request.negocio
+    buscar = request.GET.get("buscar", "").strip()
+    empleados = Empleado.objects.filter(negocio=negocio).select_related(
+        "usuario",
+        "rol"
+    )
+    if buscar:
+        empleados = empleados.filter(
+            Q(usuario__first_name__icontains=buscar) |
+            Q(usuario__last_name__icontains=buscar) |
+            Q(usuario__username__icontains=buscar) |
+            Q(rol__nombre_rol__icontains=buscar) |
+            Q(celular__icontains=buscar)
+        )
+    formulario = EmpleadoForm(
+        negocio=negocio
+    )
+    context = {
+        "empleados": empleados,
+        "buscar": buscar,
+        "formulario": formulario,
+    }
+    return render(
+        request,
+        "empleados/empleados.html",
+        context
+    )
+    
+@login_required
+@negocio_required
+def editar_empleado(request, id_empleado):
+
+    negocio = request.negocio
+
+    empleado = get_object_or_404(
+        Empleado.objects.select_related("usuario"),
+        id=id_empleado,
+        negocio=negocio
+    )
+
+    usuario = empleado.usuario
+
+    if request.method == "POST":
+
+        usuario_form = UsuarioEmpleadoForm(
+            request.POST,
+            instance=usuario
+        )
+
+        empleado_form = EmpleadoForm(
+            request.POST,
+            instance=empleado,
+            negocio=negocio
+        )
+
+        if (
+            usuario_form.is_valid()
+            and empleado_form.is_valid()
+        ):
+
+            with transaction.atomic():
+
+                usuario_form.save()
+                empleado_form.save()
+
+            messages.success(
+                request,
+                "Empleado actualizado correctamente."
+            )
+
+            return redirect("empleados")
+
+    else:
+
+        usuario_form = UsuarioEmpleadoForm(
+            instance=usuario
+        )
+
+        empleado_form = EmpleadoForm(
+            instance=empleado,
+            negocio=negocio
+        )
+
+    return render(
+        request,
+        "empleados/partials/update/_formulario_empleado.html",
+        {
+            "usuario_form": usuario_form,
+            "empleado_form": empleado_form,
+            "empleado": empleado,
+        }
+    )
+    
+@login_required
+@negocio_required
+def eliminar_empleado(request, id_empleado):
+    negocio = request.negocio
+    empleado = get_object_or_404(
+        Empleado,
+        id=id_empleado,
+        negocio=negocio
+    )
+    if request.method == "POST":
+        empleado.estado = Empleado.EstadoEmpleado.DESPEDIDO
+        empleado.usuario.is_active = False
+        empleado.usuario.save(
+            update_fields=["is_active"]
+        )
+        empleado.save(
+            update_fields=["estado"]
+        )
+        messages.success(
+            request,
+            "El empleado fue dado de baja."
+        )
+        return redirect("empleados")
+    return render(
+        request,
+        "empleados/partials/delete/_modal_eliminar_empleado.html", {
+            "empleado": empleado
+        }
+    )
+    
 

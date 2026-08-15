@@ -25,4 +25,9 @@ urlpatterns = [
     path("servicios/<int:id_servicio>/editar/", views.editar_servicio, name="editar_servicio"),
     path("servicios/<int:id_servicio>/eliminar/", views.eliminar_servicio,  name="eliminar_servicio"),
 
+    # URLS empleados
+    path("empleados/", views.lista_empleados, name="empleados"),
+    path("empleados/nuevo/", views.crear_empleado, name="crear_empleado"),
+    path("empleados/<int:id_empleado>/editar/", views.editar_empleado, name="editar_empleado"),
+    path("empleados/<int:id_empleado>/eliminar/", views.eliminar_empleado, name="eliminar_empleado"),
 ]

@@ -1,0 +1,59 @@
+<form
+    hx-post="{% url 'crear_empleado' %}"
+    hx-target="#contenido-modal-crear-empleado"
+    hx-swap="innerHTML">
+
+    {% csrf_token %}
+
+    <h3>Datos del usuario</h3>
+
+    {% for field in usuario_form %}
+        <div class="form-group">
+
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% for error in field.errors %}
+                <span class="field-error">
+                    {{ error }}
+                </span>
+            {% endfor %}
+
+        </div>
+    {% endfor %}
+
+
+    <h3>Datos del empleado</h3>
+
+    {% for field in empleado_form %}
+        <div class="form-group">
+
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% for error in field.errors %}
+                <span class="field-error">
+                    {{ error }}
+                </span>
+            {% endfor %}
+
+        </div>
+    {% endfor %}
+
+
+    <button
+        type="submit"
+        class="btn-save">
+
+        <i class="bi bi-check-lg"></i>
+        Crear empleado
+
+    </button>
+
+</form>

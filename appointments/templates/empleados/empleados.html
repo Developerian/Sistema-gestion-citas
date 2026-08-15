@@ -1,0 +1,104 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block title %}
+Listado de empleados
+{% endblock %}
+
+{% block menu_empleados %}
+active
+{% endblock %}
+
+{% block encabezado %}
+Gestión de Empleados
+{% endblock %}
+
+{% block content %}
+
+<div class="toolbar-container">
+
+    <!-- Búsqueda -->
+
+    <form method="GET"
+          action="{% url 'empleados' %}"
+          class="search-form">
+
+        <input
+            type="text"
+            name="buscar"
+            placeholder="Buscar empleado..."
+            value="{{ buscar }}"
+            class="search-input"
+        >
+
+        <button type="submit" class="btn btn-search">
+            <i class="bi bi-search"></i>
+            Buscar
+        </button>
+
+    </form>
+
+
+    <!-- Acciones -->
+
+    <div class="actions-group">
+
+        <button
+            type="button"
+            class="btn btn-filter">
+
+            <i class="bi bi-funnel"></i>
+            Filtros avanzados
+
+        </button>
+
+
+        <div class="dropdown-actions">
+
+            <button
+                type="button"
+                class="btn-more"
+                aria-label="Más acciones">
+
+                <i class="bi bi-three-dots-vertical"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- Crear empleado -->
+
+        <button
+            type="button"
+            class="btn-save"
+            hx-get="{% url 'crear_empleado' %}"
+            hx-target="#contenido-modal-crear-empleado"
+            hx-swap="innerHTML"
+            data-abrir-modal="modal-crear-empleado">
+
+            <i class="bi bi-person-plus"></i>
+            Agregar empleado
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Tabla -->
+
+{% include "empleados/partials/tabla_empleados.html" %}
+
+
+<!-- Modales -->
+
+{% include "empleados/partials/create/_modal_crear_empleado.html" %}
+
+{% include "empleados/partials/update/_modal_editar_empleado.html" %}
+
+{% include "empleados/partials/delete/_modal_eliminar_empleado.html" %}
+
+
+{% endblock %}

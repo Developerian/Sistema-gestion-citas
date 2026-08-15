@@ -30,7 +30,6 @@ class Cita(models.Model):
         REAGENDADA = 'REAGENDADA', 'Reagendada'
         NO_ASISTIO = 'NO_ASISTIO', 'Cliente no llegó'
         NO_ATENDIDA = 'NO_ATENDIDA', 'Cliente no fue atendido'
-
     id_cita = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='citas_asignadas')
     id_servicio = models.ForeignKey("Servicio", blank=True, null=True, on_delete= models.PROTECT, related_name="citas")
@@ -40,16 +39,13 @@ class Cita(models.Model):
     hora_cita = models.TimeField()
     observaciones = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
     estado = models.CharField(
         max_length=20,
         choices=EstadoCita.choices,
         default=EstadoCita.PENDIENTE
     )
-
     def __str__(self):
         return f"Cita #{self.id_cita} - {self.id_cliente} ({self.fecha_cita} {self.hora_cita})"
-    
 
 class Servicio(models.Model):
     id_servicio = models.AutoField(primary_key=True)
@@ -62,43 +58,50 @@ class Servicio(models.Model):
     def __str__(self):
         return self.nombre_servicio
 
-
 class Empleado(models.Model):
     usuario = models.OneToOneField(
         Usuario,
         on_delete=models.CASCADE,
         related_name="empleado"
     )
-
     rol = models.ForeignKey(
         Rol,
         on_delete=models.PROTECT
     )
-
     negocio = models.ForeignKey(
         Negocio,
         on_delete=models.CASCADE
     )
-
     celular = models.CharField(
         max_length=20,
         blank=False,
         null=False
     )
-
     class EstadoEmpleado(models.TextChoices):
         ACTIVO = 'ACTIVO', 'Activo / Trabajando'
         INACTIVO = 'INACTIVO', 'Inactivo'
         VACACIONES = 'VACACIONES', 'En Vacaciones'
         PERMISO = 'PERMISO', 'Permiso'
         DESPEDIDO = 'DESPEDIDO', 'De baja'
-        
-
     estado = models.CharField(
         max_length=20,
         choices=EstadoEmpleado.choices,
         default=EstadoEmpleado.ACTIVO
     )
-
     def __str__(self):
         return self.usuario.username
+
+class Propietario(models.Model):
+    usuario = models.OneToOneField(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name="propietario"
+    )
+    negocio = models.OneToOneField(
+        Negocio,
+        on_delete=models.CASCADE,
+        related_name="propietario"
+    )
+    def __str__(self):
+        return self.usuario.username
+    

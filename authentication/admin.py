@@ -10,11 +10,16 @@ from .models import Rol, Negocio, Usuario
 class CustomUserAdmin(UserAdmin):
     list_display = (
         'username',
+        'tipo_usuario',
         'email',
         'estado',
         'is_staff',
         'is_active',
     )
+    
+    @admin.display(description='Tipo de Usuario')
+    def get_tipo_usuario(self, obj):
+        return obj.tipo_usuario
 
 
 @admin.register(Rol)

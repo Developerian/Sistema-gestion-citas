@@ -1,0 +1,109 @@
+<div class="table-container">
+
+    <table class="table-citas">
+
+        <thead>
+
+            <tr>
+
+                <th>Empleado</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Celular</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for empleado in empleados %}
+
+            <tr>
+
+                <td>
+                    {{ empleado.usuario.get_full_name|default:empleado.usuario.username }}
+                </td>
+
+
+                <td>
+                    {{ empleado.usuario.username }}
+                </td>
+
+
+                <td>
+                    {{ empleado.rol.nombre_rol }}
+                </td>
+
+
+                <td>
+                    {{ empleado.celular }}
+                </td>
+
+
+                <td>
+
+                    {{ empleado.get_estado_display }}
+
+                </td>
+
+
+                <td class="actions-cell">
+
+                    <div class="actions-group">
+
+                        <!-- Editar -->
+
+                        <button
+                            type="button"
+                            class="btn-edit"
+                            data-abrir-modal="modal-editar-empleado"
+                            data-url="{% url 'editar_empleado' empleado.id %}"
+                            title="Editar empleado">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                        </button>
+
+
+                        <!-- Eliminar -->
+
+                        <button
+                            type="button"
+                            class="btn-delete"
+                            data-abrir-modal="modal-eliminar-empleado"
+                            data-url="{% url 'eliminar_empleado' empleado.id %}"
+                            title="Eliminar empleado">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="6" class="empty-msg">
+
+                    No existen empleados registrados.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>

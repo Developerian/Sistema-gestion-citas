@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Cita, Empleado, Servicio
+from .models import Cliente, Cita, Empleado, Propietario, Servicio
 
 
 @admin.register(Cliente)
@@ -50,8 +50,39 @@ class CitaAdmin(admin.ModelAdmin):
 class EmpleadoAdmin(admin.ModelAdmin):
     list_display = (
         'usuario',
+        'nombre_empleado',
+        'apellido_empleado',
         'negocio',
         'rol',
         'celular',
         'estado',
     )
+    
+    @admin.display(description='Nombre', ordering='usuario__first_name')
+    def nombre_empleado(self, obj):
+        return obj.usuario.first_name
+
+    @admin.display(description='Apellido', ordering='usuario__last_name')
+    def apellido_empleado(self, obj):
+        return obj.usuario.last_name
+    
+    list_select_related = ('usuario', 'negocio')
+    
+    @admin.register(Propietario)
+    class PropietarioAdmin(admin.ModelAdmin):
+        list_display = (
+            'usuario',
+            'get_nombre',
+            'get_apellido',
+            'negocio',
+        )
+        
+        list_select_related = ('usuario', 'negocio')
+
+        @admin.display(description='Nombre', ordering='usuario__first_name')
+        def get_nombre(self, obj):
+            return obj.usuario.first_name
+
+        @admin.display(description='Apellido', ordering='usuario__last_name')
+        def get_apellido(self, obj):
+            return obj.usuario.last_name

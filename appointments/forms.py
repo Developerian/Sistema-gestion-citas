@@ -1,8 +1,8 @@
 #forms.py
 
 from django import forms
-from .models import Cita, Cliente, Servicio
-from authentication.models import Usuario
+from .models import Cita, Cliente, Empleado, Servicio
+from authentication.models import Rol, Usuario
 
 class CitaForm(forms.ModelForm):
     class Meta:
@@ -124,3 +124,37 @@ class ServicioForm(forms.ModelForm):
                 }
             ),
         }
+        
+class UsuarioEmpleadoForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput
+    )
+    class Meta:
+        model = Usuario
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
+        
+class EmpleadoForm(forms.ModelForm):
+
+    class Meta:
+        model = Empleado
+        fields = [
+            "rol",
+            "celular",
+            "estado",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        negocio = kwargs.pop("negocio", None)
+
+        super().__init__(*args, **kwargs)
+
+        if negocio:
+            self.fields["rol"].queryset = Rol.objects.filter(
+                negocio=negocio
+            )
