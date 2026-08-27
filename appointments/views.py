@@ -4,6 +4,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import permission_required
 
 from appointments.decorators import negocio_required
 from appointments.models import Cita, Cliente, Servicio
@@ -405,6 +406,11 @@ def eliminar_servicio(request, id_servicio):
 
 # === Crud empleados ===
 
+@permission_required(
+    "appointments.add_empleado",
+    raise_exception=True
+    
+)
 @login_required
 @negocio_required
 def crear_empleado(request):
@@ -448,7 +454,14 @@ def crear_empleado(request):
         }
     )
     
+    
+
 @login_required
+@permission_required(
+    "appointments.view_empleado",
+    raise_exception=True
+
+)
 @negocio_required
 def lista_empleados(request):
     negocio = request.negocio
@@ -480,6 +493,11 @@ def lista_empleados(request):
     )
     
 @login_required
+@permission_required(
+    "appointments.change_empleado",
+    raise_exception=True
+
+)
 @negocio_required
 def editar_empleado(request, id_empleado):
 
@@ -545,6 +563,11 @@ def editar_empleado(request, id_empleado):
     )
     
 @login_required
+@permission_required(
+    "appointments.delete_empleado",
+    raise_exception=True
+
+)
 @negocio_required
 def eliminar_empleado(request, id_empleado):
     negocio = request.negocio

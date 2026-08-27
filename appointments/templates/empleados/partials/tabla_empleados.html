@@ -1,109 +1,93 @@
-<div class="table-container">
+{% load static %}
 
-    <table class="table-citas">
+<div class="card panel-tabla">
+    <div class="table-container">
+        <table class="table-citas">
+            <thead>
+                <tr>
+                    <th class="th-checkbox">
+                        <input type="checkbox" id="select-all" class="custom-checkbox">
+                    </th>
+                    <th>Empleado</th>
+                    <th>Rol</th>
+                    <th>Celular</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
 
-        <thead>
+            <tbody>
+                {% for empleado in empleados %}
+                <tr>
+                    <td class="td-checkbox">
+                        <input type="checkbox" name="empleado_ids" value="{{ empleado.id }}" class="custom-checkbox row-checkbox">
+                    </td>
 
-            <tr>
+                    <td>
+                        {{ empleado.usuario.username }}
+                    </td>
 
-                <th>Empleado</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Celular</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                    <td>
+                        {{ empleado.rol.nombre_rol }}
+                    </td>
 
-            </tr>
+                    <td>
+                        {{ empleado.celular }}
+                    </td>
 
-        </thead>
+                    <td>
+                        <!-- Clases dinámicas según el valor del estado -->
+                        <span class="badge badge-status 
+                            {% if empleado.estado == 'ACTIVO' or empleado.estado == 'A' %}badge-activo
+                            {% elif empleado.estado == 'PENDIENTE' or empleado.estado == 'P' %}badge-pendiente
+                            {% else %}badge-inactivo{% endif %}">
+                            <span class="dot"></span>
+                            {{ empleado.get_estado_display }}
+                        </span>
+                    </td>
 
+                    <td class="actions-cell">
+                        <div class="dropdown-actions">
+                            <button type="button" class="btn-more-dots" aria-label="Acciones">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu-custom">
+                                
+                                <button
+                                    type="button"
+                                    class="dropdown-item-btn btn-edit"
+                                    data-abrir-modal="modal-editar-empleado"
+                                    data-url="{% url 'editar_empleado' empleado.id %}"
+                                    title="Editar empleado">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>Editar</span>
+                                </button>
 
-        <tbody>
+                                
+                                <button
+                                    type="button"
+                                    class="dropdown-item-btn btn-delete"
+                                    data-abrir-modal="modal-eliminar-empleado"
+                                    data-url="{% url 'eliminar_empleado' empleado.id %}"
+                                    title="Eliminar empleado">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Dar de baja</span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
 
-            {% for empleado in empleados %}
-
-            <tr>
-
-                <td>
-                    {{ empleado.usuario.get_full_name|default:empleado.usuario.username }}
-                </td>
-
-
-                <td>
-                    {{ empleado.usuario.username }}
-                </td>
-
-
-                <td>
-                    {{ empleado.rol.nombre_rol }}
-                </td>
-
-
-                <td>
-                    {{ empleado.celular }}
-                </td>
-
-
-                <td>
-
-                    {{ empleado.get_estado_display }}
-
-                </td>
-
-
-                <td class="actions-cell">
-
-                    <div class="actions-group">
-
-                        <!-- Editar -->
-
-                        <button
-                            type="button"
-                            class="btn-edit"
-                            data-abrir-modal="modal-editar-empleado"
-                            data-url="{% url 'editar_empleado' empleado.id %}"
-                            title="Editar empleado">
-
-                            <i class="bi bi-pencil-square"></i>
-
-                        </button>
-
-
-                        <!-- Eliminar -->
-
-                        <button
-                            type="button"
-                            class="btn-delete"
-                            data-abrir-modal="modal-eliminar-empleado"
-                            data-url="{% url 'eliminar_empleado' empleado.id %}"
-                            title="Eliminar empleado">
-
-                            <i class="bi bi-trash"></i>
-
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-            {% empty %}
-
-            <tr>
-
-                <td colspan="6" class="empty-msg">
-
-                    No existen empleados registrados.
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-        </tbody>
-
-    </table>
-
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-msg">
+                        No existen empleados registrados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<script src="{% static 'js/chebox_table/checkbox.js' %}"></script>
